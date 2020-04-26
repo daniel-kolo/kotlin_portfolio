@@ -3,7 +3,7 @@ package com.kotlin_portfolio.domain
 import javax.persistence.*
 
 @Entity
-class User(firstName: String, lastName: String, email: String, password: String){
+class User( firstName: String, lastName: String, email: String, password: String){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val Id : Long = 0
@@ -18,5 +18,6 @@ class User(firstName: String, lastName: String, email: String, password: String)
     val password = password
     //@Column
     //val portfolio = portfolio
+
 
 }

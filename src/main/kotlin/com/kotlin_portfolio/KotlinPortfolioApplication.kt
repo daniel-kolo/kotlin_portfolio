@@ -5,17 +5,15 @@ import com.kotlin_portfolio.repo.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.stereotype.Repository
 
 @SpringBootApplication
-class KotlinPortfolioApplication
-
-@Autowired
-private lateinit var repo: UserRepository
+open class KotlinPortfolioApplication
 
 fun main(args: Array<String>) {
     runApplication<KotlinPortfolioApplication>(*args)
-    val user = User("Firstname","Lastname",
-                        "test@email.com", "test_pass")
 
-    repo.save(user)
+
+
+
 }
