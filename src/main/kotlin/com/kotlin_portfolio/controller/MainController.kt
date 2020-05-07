@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class MainController{
 
-    @Autowired //don't forget the setter
+    @Autowired
     private val repo: UserRepository? = null
 
     @GetMapping("/test")

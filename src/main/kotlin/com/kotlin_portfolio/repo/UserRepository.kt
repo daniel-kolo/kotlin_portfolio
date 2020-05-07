@@ -7,5 +7,6 @@ import java.util.*
 
 interface UserRepository : JpaRepository<User, Long> {
     override fun findById(Id: Long): Optional<User?>
+    fun findOneByUserName(userName: String): User?
     //fun findAllByOrderByAddedAtDesc(): Iterable<Article>
 }
