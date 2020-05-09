@@ -20,9 +20,6 @@ class MainController{
         repo!!.save(user)
 
         return "test"
-
     }
-
-
 }
 

@@ -14,5 +14,4 @@ open class CustomUserDetailsService (private val userRepository: UserRepository)
     override fun loadUserByUsername(username: String): UserDetails {
         return CustomUserDetails(userRepository.findOneByUserName(username)!!)
     }
-
 }
