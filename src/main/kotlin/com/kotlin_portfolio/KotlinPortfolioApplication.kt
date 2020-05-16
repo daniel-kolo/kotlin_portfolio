@@ -14,7 +14,21 @@ open class KotlinPortfolioApplication
 fun main(args: Array<String>) {
     runApplication<KotlinPortfolioApplication>(*args)
 
+    /*
+    val (request, response, result) = tokenEndpoint.httpPost(listOf(
+            "grant_type" to "client_credentials",
+            "client_id" to clientId,
+            "client_secret" to clientSecret,
+            "scope" to scopes.joinToString(" ")))
+            .responseString()
 
-
+    when (result) {
+        is Result.Success -> {
+            // handle response
+        }
+        is Result.Failure -> {
+            // handle error
+        }
+    }*/
 
 }
