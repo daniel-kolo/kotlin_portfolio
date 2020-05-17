@@ -160,6 +160,12 @@
         </dependency>
 
         <dependency>
+            <groupId>pl.zankowski</groupId>
+            <artifactId>iextrading4j-all</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
