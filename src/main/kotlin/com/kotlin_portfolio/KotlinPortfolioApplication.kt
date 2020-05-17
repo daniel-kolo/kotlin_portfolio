@@ -12,8 +12,6 @@ import java.util.*
 @SpringBootApplication
 open class KotlinPortfolioApplication
 
-
-
 fun main(args: Array<String>) {
     runApplication<KotlinPortfolioApplication>(*args)
 
