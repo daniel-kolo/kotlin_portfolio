@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -11,9 +11,7 @@
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
-
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,25 +37,51 @@
             </li>
 
         </ul>
-
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
 </nav>
 
-<h1 style="text-align:center">Portfolio Manager</h1>
-<div class="container"></div>
-<div class="container unauthenticated">
-    With GitHub: <a href="/oauth2/authorization/github">click here</a>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Stock name</th>
+        <th scope="col">Price Bought</th>
+        <th scope="col">Current Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+    </tr>
+    <tr>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+    </tr>
+    <tr>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown button
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+
 </div>
-<div class="container authenticated" style="display:none">
-    Hello <span id="user"></span>! Welcome to Portfolio Manager!
-</div>
 
-
-
-<script type="text/javascript">
-    $.get("/getAuthenticatedUser", function(data) {
-        $("#user").html(data);
-        $(".unauthenticated").hide()
-        $(".authenticated").show()
-    });
-</script>
+</body>
+</html>
