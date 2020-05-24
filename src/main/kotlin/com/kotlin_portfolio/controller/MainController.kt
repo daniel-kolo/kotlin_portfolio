@@ -1,6 +1,8 @@
 package com.kotlin_portfolio.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.kotlin_portfolio.domain.IEX.IEXWrapper
 import com.kotlin_portfolio.domain.User
 import com.kotlin_portfolio.repo.UserRepository
@@ -23,12 +25,43 @@ class MainController{
     private val iex : IEXWrapper? = null
 
     @GetMapping("/getAuthenticatedUser")
-    fun user(@AuthenticationPrincipal principal: OAuth2User): String {
+    fun getAuthenticatedUser(@AuthenticationPrincipal principal: OAuth2User): String {
         val login = principal.getAttributes().get("login").toString()
         val userService = UserService(repo!!)
         userService.processUserLogin(principal)
-        //iex!!.getStockPrices()
         return login
     }
+
+    @GetMapping("/getStockSymbolList")
+    fun getStockSymbolList(): String {
+        val gson = Gson()
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+
+        val tut = listOf("Tut #1", "bezkoder", "asd")
+
+        val jsonTut: String = gson.toJson(tut)
+        println(jsonTut)
+
+        val jsonTutPretty: String = gsonPretty.toJson(tut)
+        println(jsonTutPretty)
+        //return iex.stockSymbolList.map()
+        return jsonTut
+    }
+
+    @GetMapping("/getStockList")
+    fun testJs(): String {
+        val gson = Gson()
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+
+        if (iex == null){
+            return gson.toJson(mutableListOf<String>("placeholder1", "placeholder2"))
+        }
+        val stocks = iex!!.stockSymbolList
+        val jsonStocks: String = gson.toJson(stocks)
+        return jsonStocks
+    }
+
+
+
 }
 
