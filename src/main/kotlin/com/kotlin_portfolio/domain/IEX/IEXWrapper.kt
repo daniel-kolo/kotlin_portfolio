@@ -47,8 +47,11 @@ class IEXWrapper {
         }
     }
 
-    fun getStockPrice(){
-        
+    fun getStockPrice(ticker : String){
+        val cryptoProcess = ProcessBuilder("curl", "https://cloud.iexapis.com/beta/ref-data/crypto/symbols?token=pk_5fd464ae2e144027a6d71d451a84b488").start()
+        cryptoProcess.inputStream.reader(Charsets.UTF_8).use {
+            val stockPriceData = it.readText()
+        }
     }
 
 }
