@@ -54,7 +54,7 @@ class MainController{
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
 
         if (iex == null){
-            return gson.toJson(mutableListOf<String>("placeholder1", "placeholder2"))
+            return gson.toJson(mutableListOf<String>("APPLE INC", "TESLA INC"))
         }
         val stocks = iex!!.stockSymbolList
         val jsonStocks: String = gson.toJson(stocks)
