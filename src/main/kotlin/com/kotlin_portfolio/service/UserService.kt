@@ -13,7 +13,7 @@ class UserService(val repo : UserRepository) {
         val username = principal.getAttributes().get("login").toString()
         val email = principal.getAttributes().get("email").toString()
 
-        if (repo!!.findOneByUserName(username)!=null){
+        if (repo!!.findByUserName(username)!=null){
 
         }
         else{
