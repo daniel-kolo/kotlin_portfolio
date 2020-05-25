@@ -18,48 +18,11 @@ import java.util.*
 @RestController
 class MainController{
 
-    @Autowired
-    private val repo: UserRepository? = null
 
-    @Autowired
-    private val iex : IEXWrapper? = null
 
-    @GetMapping("/getAuthenticatedUser")
-    fun getAuthenticatedUser(@AuthenticationPrincipal principal: OAuth2User): String {
-        val login = principal.getAttributes().get("login").toString()
-        val userService = UserService(repo!!)
-        userService.processUserLogin(principal)
-        return login
-    }
 
-    @GetMapping("/getStockSymbolList")
-    fun getStockSymbolList(): String {
-        val gson = Gson()
-        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
 
-        val tut = listOf("Tut #1", "bezkoder", "asd")
 
-        val jsonTut: String = gson.toJson(tut)
-        println(jsonTut)
-
-        val jsonTutPretty: String = gsonPretty.toJson(tut)
-        println(jsonTutPretty)
-        //return iex.stockSymbolList.map()
-        return jsonTut
-    }
-
-    @GetMapping("/getStockList")
-    fun testJs(): String {
-        val gson = Gson()
-        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-
-        if (iex == null){
-            return gson.toJson(mutableListOf<String>("APPLE INC", "TESLA INC"))
-        }
-        val stocks = iex!!.stockSymbolList
-        val jsonStocks: String = gson.toJson(stocks)
-        return jsonStocks
-    }
 
 
 
