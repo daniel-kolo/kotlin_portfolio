@@ -16,6 +16,18 @@
         .table{
             margin: 20px auto;
         }
+        .plus{
+            cursor: pointer;
+            color: green;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .minus{
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            font-size: 24px;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
@@ -107,9 +119,6 @@
             };
             loadTable()
 
-
-            /*
-
             axios.get('/test', {
 
             })
@@ -121,17 +130,6 @@
                 });
 
             axios.post('/addStock',
-            { ticker : "GOOG", quantity : 1
-
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-                axios.post('/removeStock',
                 { ticker : "APPL", quantity : 1
 
                 })
@@ -141,9 +139,6 @@
                 .catch(function (error) {
                     console.log(error);
                 });
-
-            */
-
 
 
         }
@@ -187,8 +182,24 @@
 <div id="stock_results">
 </div>
 
-<!-- TABLE -->
+<div class='container'>
+    <table class='table-dark table-striped' id='result_table'>
+        <thead>
+        <th style="width:200px">Stock name</th>
+        <th style="width:200px">Price bought</th>
+        <th style="width:200px">Current price</th>
+        <th style="width:200px">asd</th>
+        <th style="width:200px">ar</th>
+        <th style="width:200px">+-</th>
+        </thead>
+        <tbody>
 
+        </tbody>
+    </table>
+
+</div>
+
+<!-- TABLE -->
 
 
 <!-- DYNAMIC DROPDOWN-->
@@ -199,7 +210,7 @@
     </div>
 
     <!-- DYNAMIC DROPDOWN-->
-    <select  class ="form-control" style="width:250px" id="stock list" ></select>
+    <select  class ="form-control" onclick="changeF();" style="width:250px" id="stock_list" ></select>
 
     <!--- DYNAMIC DROPDOWN-->
 </div>
@@ -208,7 +219,8 @@
 
 </body>
 <script>
-    const genDropdown = async () => {
+
+    /*const genDropdown = async () => {
         const response =  await fetch('http://localhost:8080/getStockList');
         const myJson =  await response.json(); //extract JSON from the http response
         let tmp = Array();
@@ -217,16 +229,72 @@
             tmp.push(myJson[i])
         }
 
-        var countries = tmp, select = document.getElementById( 'stock list' );
+        var countries = tmp, select = document.getElementById( 'stock_list' );
 
         for( country in countries ) {
             select.add( new Option( countries[country] ) );
         }
+    };*/
+
+    //genDropdown()
+
+    $(function asd(){
+
+
+
+    })
+
+    function changeF(){
+
+        console.log( $("#stock_list option:selected").text())
+        var result = $("#stock_list option:selected").text();
+
+        $("#result_table").append("<tr><td>"+result+"</td><td>"+result.pBought+"</td><td>"+result.cPrice+"</td><td >"+result.numOfStocks+"</td><td class='ar'>"+result.totalVal+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
+
+        var selectBox = document.getElementById("stock_list");
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        console.log("value: "+selectedValue);
+    }
+</script>
+
+<script>
+    $(function() {
+        var result = [
+            {'name':'mitsu','pBought':1,'cPrice':1,'numOfStocks':1111,"totalVal":1},
+            {'name':'lada','pBought':2,'cPrice':2,'numOfStocks':2222,"totalVal":1},
+            {'name':'bmw','pBought':3,'cPrice':1,'numOfStocks':3333,"totalVal":1},
+            {'name':'kia','pBought':4,'cPrice':2,'numOfStocks':4444,"totalVal":1},
+            {'name':'fiat','pBought':5,'cPrice':1,'numOfStocks':5555,"totalVal":1}
+        ];
+
+        $.each(result, function(i,v) {
+            $("#result_table tbody").append("<tr><td>"+result[i].name+"</td><td>"+result[i].pBought+"</td><td>"+result[i].cPrice+"</td><td >"+result[i].numOfStocks+"</td><td class='ar'>"+result[i].totalVal+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
+        });
+    });
+
+    $(function() {
+        $(".plus").click(function(){
+            $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())+1);
+        });
+        $(".minus").click(function(){
+            $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())-1);
+        });
+    });
+
+    var countries = ['First Element', 'Second Element', 'Third Element','SASDASD'],
+        select = document.getElementById( 'stock_list' );
+
+
+
+    for( country in countries ) {
+
+        select.add( new Option( countries[country] ) );
+
     };
 
-    genDropdown()
 
 
 </script>
+
 
 </html>

@@ -1,19 +1,17 @@
 package com.kotlin_portfolio.controller
 
-import com.kotlin_portfolio.service.UserService
-import org.springframework.data.rest.webmvc.RepositoryRestController
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import com.google.gson.Gson
-import com.kotlin_portfolio.DTO.stockAddedDTO
+import com.google.gson.GsonBuilder
+import com.kotlin_portfolio.DTO.StockTableRow
+import com.kotlin_portfolio.DTO.stockQuantityChangeDTO
 import com.kotlin_portfolio.domain.User
-import com.kotlin_portfolio.repo.RoleRepository
+import com.kotlin_portfolio.repo.PortfolioRepository
 import com.kotlin_portfolio.repo.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.GetMapping
 
 @RestController
 class UserController {
@@ -22,26 +20,54 @@ class UserController {
     private val repo: UserRepository? = null
 
     @Autowired
-    private val repo2: RoleRepository? = null
+    private val pRepo: PortfolioRepository? = null
 
-
-
-    @PostMapping("/addStock")
-    fun addStock(@RequestBody stockAdded : String): String {
-        val userName = "daniel-kolo"
-        var gson = Gson()
-        var response = gson.fromJson(stockAdded, stockAddedDTO::class.java)
-
+    fun checkUser(userName : String): User{
         var user = repo!!.findByUserName(userName)
         if (user == null){
             user = User(userName, "")
             repo!!.save(user)
         }
-        println(user)
+        return user
+    }
 
+    @PostMapping("/addStock")
+    fun addStock(@RequestBody stockAdded : String): String {
+        val userName = "daniel-kolo"
+        var user = checkUser(userName)
+        var gson = Gson()
+        var response = gson.fromJson(stockAdded, stockQuantityChangeDTO::class.java)
         user!!.addStock(response)
-
+        repo!!.save(user)
+        pRepo!!.save(user.portfolio)
+        print("asd")
        return "OK"
     }
+
+    @PostMapping("/removeStock")
+    fun removeStock(@RequestBody stockRemoved : String): String {
+        val userName = "daniel-kolo"
+        var user = checkUser(userName)
+        var gson = Gson()
+        var response = gson.fromJson(stockRemoved, stockQuantityChangeDTO::class.java)
+
+        user.removeStock(response)
+        repo!!.save(user)
+        pRepo!!.save(user.portfolio)
+
+        return "OK"
+    }
+
+    @GetMapping("/getUserStockList")
+    fun getUserStockList(): String {
+        val gson = Gson()
+
+        return gson.toJson(StockTableRow("APPL",1,1,1,1
+        ))
+
+    }
+
+
+
 
 }
