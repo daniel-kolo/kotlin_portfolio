@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kotlin_portfolio.DTO.StockTableRow
 import com.kotlin_portfolio.DTO.stockQuantityChangeDTO
+import com.kotlin_portfolio.domain.IEX.IEXWrapper
 import com.kotlin_portfolio.domain.User
 import com.kotlin_portfolio.repo.PortfolioRepository
 import com.kotlin_portfolio.repo.UserRepository
@@ -21,6 +22,9 @@ class UserController {
 
     @Autowired
     private val pRepo: PortfolioRepository? = null
+
+    @Autowired
+    private val iex: IEXWrapper? = null
 
     fun checkUser(userName : String): User{
         var user = repo!!.findByUserName(userName)
@@ -58,12 +62,48 @@ class UserController {
         return "OK"
     }
 
+
+
     @GetMapping("/getUserStockList")
     fun getUserStockList(): String {
         val gson = Gson()
+        val userName = "daniel-kolo"
+        var user = checkUser(userName)
 
-        return gson.toJson(StockTableRow("APPL",1,1,1,1
-        ))
+        val stockMap = user.portfolio.stockMap
+        //TODO remove
+        stockMap.remove("APPL")
+        stockMap.put("AAPL",10)
+        val stockPriceMap = iex!!.getStockPriceList(stockMap.keys.toList())
+
+        var rows = mutableListOf<StockTableRow>()
+
+        for (stockName in stockPriceMap.keys){
+            val name = stockName
+            val priceBought = 1
+            val currentPrice = stockPriceMap.get(stockName)
+            val numberOfStocks = stockMap.get(stockName)
+            val totalCurrentValue =  currentPrice!!*numberOfStocks!!
+            rows.add(StockTableRow(name,
+                                priceBought,
+                                currentPrice,
+                                numberOfStocks,
+                                totalCurrentValue))
+        }
+
+        println(rows)
+
+
+
+        //var result = iex!!.getStockPriceList(listOf("aapl","tsla","fb"))
+
+
+        val list = listOf(StockTableRow("APPL",1,1,1,1),
+                StockTableRow("GOOG",2,2,2,2))
+
+
+
+        return gson.toJson(rows)
 
     }
 

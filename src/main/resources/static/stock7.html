@@ -210,7 +210,7 @@
     </div>
 
     <!-- DYNAMIC DROPDOWN-->
-    <select  class ="form-control" style="width:250px" id="stock list" ></select>
+    <select  class ="form-control"  onclick="changeF();"  style="width:250px" id="stock_list" ></select>
 
     <!--- DYNAMIC DROPDOWN-->
 </div>
@@ -219,7 +219,7 @@
 
 </body>
 <script>
-    const genDropdown = async () => {
+    /*const genDropdown = async () => {
         const response =  await fetch('http://localhost:8080/getStockList');
         const myJson =  await response.json(); //extract JSON from the http response
         let tmp = Array();
@@ -235,9 +235,44 @@
         }
     };
 
-    genDropdown()
+    genDropdown()*/
+    /* STATICK LIST  */
+    var countries = ['First Element', 'Second Element', 'Third Element','SASDASD'],
+        select = document.getElementById( 'stock_list' );
 
 
+
+    for( country in countries ) {
+
+        select.add( new Option( countries[country] ) );
+
+    };
+    var selected = [];
+    /* STATICK LIST  END */
+    function changeF(){
+        var selectBox = document.getElementById("stock_list");
+        var vane = true;
+
+        var result = $("#stock_list option:selected").text();
+
+        for( var i = 0; i< selected.length;i++){
+            if( selected[i] !== result ){
+                vane = true
+            }else{
+                vane = false
+            }
+        }
+        if ( vane ){
+            $("#result_table").append("<tr><td>"+result+"</td><td>"+result.pBought+"</td><td>"+result.cPrice+"</td><td >"+result.numOfStocks+"</td><td class='ar'>"+result.totalVal+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
+        }
+        selected.push(result);
+        console.log("SELECTED ARRAY ");
+        console.log(selected);
+
+
+
+
+    }
 </script>
 
 <script>
@@ -257,23 +292,21 @@
             })
             .then(function (response) {
                 // console.log(response.data);
-                /*var result = [{stockName: "APPL", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
+                var result = [{stockName: "APPL", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
                     {stockName: "APPL1", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
                     {stockName: "2", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
                     {stockName: "3", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},]
-                console.log("result:")
-                console.log(result)*/
-                var result = [response.data]
+
 
                 $.each(result, function(i,v) {
-                    $("#result_table tbody").append("<tr><td>"+result[i].stockName+"</td><td>"+result[i].priceBought+"</td><td>"+result[i].currentPrice+"</td><td >"+result[i].numberOfStocks+"</td><td class='ar'>"+result[i].totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
+                    $("#result_table tbody").append("<tr><td>"+result[i].stockName+"</td><td>"+result[i].priceBought+"</td><td>"+result[i].currentPrice+"</td><td >"+result[i].numberOfStocks+"</td><td class='totalCurrentValue'>"+result[i].totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
                 });
 
                 /* PLUS FV*/
                 $(".plus").click(function(){
                     console.log("here")
 
-                    $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())+1);
+                    $(this).parent().prev('.totalCurrentValue').html(parseInt($(this).parent().prev('.totalCurrentValue').html())+1);
 
                     /* axios.post('/addStock',
                          { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
@@ -289,7 +322,7 @@
                 });
                 /* MINUS*/
                 $(".minus").click(function(){
-                    $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())-1);
+                    $(this).parent().prev('.totalCurrentValue').html(parseInt($(this).parent().prev('.totalCurrentValue').html())-1);
                     /*axios.post('/removeStock',
                         { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
 
@@ -308,43 +341,9 @@
                 console.log("ERROR:  "+error);
             });
 
-        /* $.each(result, function(i,v) {
-             $("#result_table tbody").append("<tr><td>"+result[i].stockName+"</td><td>"+result[i].priceBought+"</td><td>"+result[i].currentPrice+"</td><td >"+result[i].numberOfStocks+"</td><td class='ar'>"+result[i].totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
-         });*/
     });
 
-    /*  $(function() {
-          $(".plus").click(function(){
-              console.log("here")
 
-              $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.totalCurrentValue').html())+1);
-
-              axios.post('/addStock',
-                  { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
-
-                  })
-                  .then(function (response) {
-                      console.log(response);
-                  })
-                  .catch(function (error) {
-                      console.log(error);
-                  });
-
-          });
-          $(".minus").click(function(){
-              $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())-1);
-              axios.post('/removeStock',
-                  { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
-
-                  })
-                  .then(function (response) {
-                      console.log(response);
-                  })
-                  .catch(function (error) {
-                      console.log(error);
-                  });
-          });
-      });*/
 </script>
 
 
