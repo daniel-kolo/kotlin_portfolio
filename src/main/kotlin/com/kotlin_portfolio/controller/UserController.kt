@@ -62,6 +62,19 @@ class UserController {
         return "OK"
     }
 
+    @PostMapping("/addNewStock")
+    fun addNewStock(@RequestBody stockAdded : String): String {
+        val userName = "daniel-kolo"
+        var user = checkUser(userName)
+        var gson = Gson()
+        var response = gson.fromJson(stockAdded, stockQuantityChangeDTO::class.java)
+        user!!.addStock(response)
+        repo!!.save(user)
+        pRepo!!.save(user.portfolio)
+        println("new stock added")
+        return "OK"
+    }
+
 
 
     @GetMapping("/getUserStockList")
@@ -69,11 +82,7 @@ class UserController {
         val gson = Gson()
         val userName = "daniel-kolo"
         var user = checkUser(userName)
-
         val stockMap = user.portfolio.stockMap
-        //TODO remove
-        stockMap.remove("APPL")
-        stockMap.put("AAPL",10)
         val stockPriceMap = iex!!.getStockPriceList(stockMap.keys.toList())
 
         var rows = mutableListOf<StockTableRow>()
@@ -90,22 +99,26 @@ class UserController {
                                 numberOfStocks,
                                 totalCurrentValue))
         }
-
-        println(rows)
-
-
-
-        //var result = iex!!.getStockPriceList(listOf("aapl","tsla","fb"))
-
-
-        val list = listOf(StockTableRow("APPL",1,1,1,1),
-                StockTableRow("GOOG",2,2,2,2))
-
-
-
         return gson.toJson(rows)
-
     }
+
+
+    @GetMapping("/getStockList")
+    fun getStockList(): String {
+        val gson = Gson()
+        val userName = "daniel-kolo"
+        var user = checkUser(userName)
+        val stockMap = user.portfolio.stockMap
+
+        var symbolList = iex!!.stockSymbolList
+
+        for (stockName in stockMap.keys){
+            symbolList.remove(stockName)
+        }
+
+        return gson.toJson(symbolList)
+    }
+
 
 
 

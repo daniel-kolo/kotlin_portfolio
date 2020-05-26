@@ -3,6 +3,11 @@ package com.kotlin_portfolio.domain.IEX
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.json.JSONObject
 import org.springframework.stereotype.Component
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 @Component
 class IEXWrapper {
@@ -18,23 +23,20 @@ class IEXWrapper {
         println("IEWX wrapper initialized")
         val stockProcess = ProcessBuilder("curl", "https://cloud.iexapis.com/beta/ref-data/symbols?token=pk_5fd464ae2e144027a6d71d451a84b488").start()
         stockProcess.inputStream.reader(Charsets.UTF_8).use {
-            stockData = it.readText()
+            var stockData = it.readText()
+            var processed = stockData.split("},{")
+
+            for (element in processed){
+                stockSymbolList.add( element.split("\"symbol\":\"")[1].split("\"")[0])
+            }
         }
 
         val cryptoProcess = ProcessBuilder("curl", "https://cloud.iexapis.com/beta/ref-data/crypto/symbols?token=pk_5fd464ae2e144027a6d71d451a84b488").start()
         cryptoProcess.inputStream.reader(Charsets.UTF_8).use {
             cryptoData = it.readText()
         }
+        println(stockData)
 
-        stockSymbolList = stockData.split("},{").toMutableList()
-        stockSymbolList[0] = stockSymbolList[0].split("{")[1]
-        stockSymbolList[stockSymbolList.size-1].split("}")[0]
-
-        for (i in 0..stockSymbolList.size-1){
-            stockSymbolList[i] = stockSymbolList[i].split(",")[2].split(":")[1]
-                    .split("\"")[1]
-                    .split("\"")[0]
-        }
 
         cryptoSymbolList = cryptoData.split("},{").toMutableList()
         cryptoSymbolList[0] = cryptoSymbolList[0].split("{")[1]

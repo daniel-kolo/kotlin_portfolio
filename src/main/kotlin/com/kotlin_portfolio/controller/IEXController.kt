@@ -27,7 +27,7 @@ class IEXController {
         //return iex.stockSymbolList.map()
         return jsonTut
     }
-
+    /*
     @GetMapping("/getStockList")
     fun testJs(): String {
         val gson = Gson()
@@ -40,5 +40,5 @@ class IEXController {
         val jsonStocks: String = gson.toJson(stocks)
         return jsonStocks
     }
-
+    */
 }

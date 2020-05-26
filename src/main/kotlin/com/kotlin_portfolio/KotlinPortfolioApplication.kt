@@ -15,6 +15,4 @@ fun main(args: Array<String>) {
     runApplication<KotlinPortfolioApplication>(*args)
 
 
-
-
 }
