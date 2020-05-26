@@ -257,6 +257,19 @@
     $(function() {
         $(".plus").click(function(){
             $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())+1);
+
+            axios.post('/addStock',
+                { ticker : "GOOG", quantity : 1
+
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
         });
         $(".minus").click(function(){
             $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())-1);

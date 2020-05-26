@@ -1,6 +1,6 @@
 package com.kotlin_portfolio.domain
 
-import com.kotlin_portfolio.DTO.stockAddedDTO
+import com.kotlin_portfolio.DTO.stockQuantityChangeDTO
 import com.kotlin_portfolio.security.Role
 import javax.persistence.*
 
@@ -42,11 +42,12 @@ open class User(var userName: String = "",
         this.portfolio = Portfolio()
     }
 
-    fun addStock(stockAdded : stockAddedDTO){
-        //this.portfolio = Portfolio()
-        println(stockAdded)
-        println(this.portfolio)
-        //portfolio.addStock(stockAdded)
+    fun addStock(stockQuantityChange : stockQuantityChangeDTO){
+        portfolio.addStock(stockQuantityChange)
+    }
+
+    fun removeStock(stockRemoved: stockQuantityChangeDTO){
+        portfolio.removeStock(stockRemoved)
     }
 
 }
