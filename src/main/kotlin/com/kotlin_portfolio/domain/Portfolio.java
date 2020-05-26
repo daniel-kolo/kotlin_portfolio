@@ -4,7 +4,9 @@ import com.kotlin_portfolio.DTO.stockQuantityChangeDTO;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 @Entity
@@ -46,8 +48,14 @@ public class Portfolio {
                 stockMap.remove(ticker);
             }
         }
+    }
 
-        System.out.print(stockMap);
+    public Set<String> getStockList(){
+       return stockMap.keySet();
+    }
+
+    public Map<String,Integer> getStockMap(){
+       return stockMap;
     }
 
 

@@ -189,9 +189,9 @@
         <th style="width:200px">Stock name</th>
         <th style="width:200px">Price bought</th>
         <th style="width:200px">Current price</th>
-        <th style="width:200px">asd</th>
-        <th style="width:200px">ar</th>
-        <th style="width:200px">+-</th>
+        <th style="width:200px">Number of Stocks</th>
+        <th style="width:200px">Total current value</th>
+        <th style="width:200px">Modify</th>
         </thead>
         <tbody>
 
@@ -247,11 +247,12 @@
         select.add( new Option( countries[country] ) );
 
     };
-    var selected = [];
+    var selected = ["First Element"];
+    var vane = true;
     /* STATICK LIST  END */
     function changeF(){
         var selectBox = document.getElementById("stock_list");
-        var vane = true;
+
 
         var result = $("#stock_list option:selected").text();
 
@@ -277,26 +278,15 @@
 
 <script>
     $(function() {
-
-        var result = [
-            {'stockName':'mitsu','priceBought':1,'currentPrice':1,'numberOfStocks':1111,"totalCurrentValue":1},
-            {'stockName':'lada','priceBought':2,'currentPrice':2,'numberOfStocks':2222,"totalCurrentValue":1},
-            {'stockName':'bmw','priceBought':3,'currentPrice':1,'numberOfStocks':3333,"totalCurrentValue":1},
-            {'stockName':'kia','priceBought':4,'currentPrice':2,'numberOfStocks':4444,"totalCurrentValue":1},
-            {'stockName':'fiat','priceBought':5,'currentPrice':1,'numberOfStocks':5555,"totalCurrentValue":1}
-        ];
-
-        axios.get('/',
+        axios.get('/getUserStockList',
             {
 
             })
             .then(function (response) {
-                // console.log(response.data);
-                var result = [{stockName: "APPL", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
-                    {stockName: "APPL1", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
-                    {stockName: "2", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},
-                    {stockName: "3", priceBought: 1, currentPrice: 1, numberOfStocks: 1, totalCurrentValue: 1},]
-
+                var result = []
+                for (it = 0; it<response.data.length;it++){
+                    result.push(response.data[it]);
+                }
 
                 $.each(result, function(i,v) {
                     $("#result_table tbody").append("<tr><td>"+result[i].stockName+"</td><td>"+result[i].priceBought+"</td><td>"+result[i].currentPrice+"</td><td >"+result[i].numberOfStocks+"</td><td class='totalCurrentValue'>"+result[i].totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
@@ -304,26 +294,22 @@
 
                 /* PLUS FV*/
                 $(".plus").click(function(){
-                    console.log("here")
-
                     $(this).parent().prev('.totalCurrentValue').html(parseInt($(this).parent().prev('.totalCurrentValue').html())+1);
-
-                    /* axios.post('/addStock',
-                         { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
-
-                         })
-                         .then(function (response) {
-                             console.log(response);
-                         })
-                         .catch(function (error) {
-                             console.log(error);
-                         });*/
-
+                    axios.post('/addStock',
+                        {
+                            ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 });
                 /* MINUS*/
                 $(".minus").click(function(){
                     $(this).parent().prev('.totalCurrentValue').html(parseInt($(this).parent().prev('.totalCurrentValue').html())-1);
-                    /*axios.post('/removeStock',
+                    axios.post('/removeStock',
                         { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
 
                         })
@@ -332,7 +318,7 @@
                         })
                         .catch(function (error) {
                             console.log(error);
-                        });*/
+                        });
                 });
 
 
@@ -340,7 +326,6 @@
             .catch(function (error) {
                 console.log("ERROR:  "+error);
             });
-
     });
 
 
