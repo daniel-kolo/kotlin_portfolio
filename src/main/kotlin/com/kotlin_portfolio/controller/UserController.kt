@@ -62,8 +62,11 @@ class UserController {
     fun getUserStockList(): String {
         val gson = Gson()
 
-        return gson.toJson(StockTableRow("APPL",1,1,1,1
-        ))
+        val list = listOf(StockTableRow("APPL",1,1,1,1),
+                StockTableRow("GOOG",2,2,2,2))
+
+        //return gson.toJson(StockTableRow("APPL",1,1,1,1))
+        return gson.toJson(list)
 
     }
 

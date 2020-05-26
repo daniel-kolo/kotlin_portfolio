@@ -259,13 +259,54 @@
                 var result = [response.data]
                 console.log(result)
 
+                for (it = 0; it<response.data.length;it++){
+                    console.log(response.data[it])
+                }
+
                 $.each(result, function(i,v) {
                     $("#result_table tbody").append("<tr><td>"+result[i].stockName+"</td><td>"+result[i].priceBought+"</td><td>"+result[i].currentPrice+"</td><td >"+result[i].numberOfStocks+"</td><td class='ar'>"+result[i].totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
                 });
+
+                $(".plus").click(function(){
+                    console.log("here")
+
+                    $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())+1);
+
+                    /* axios.post('/addStock',
+                         { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
+
+                         })
+                         .then(function (response) {
+                             console.log(response);
+                         })
+                         .catch(function (error) {
+                             console.log(error);
+                         });*/
+
+                });
+                /* MINUS*/
+                $(".minus").click(function(){
+                    $(this).parent().prev('.ar').html(parseInt($(this).parent().prev('.ar').html())-1);
+                    /*axios.post('/removeStock',
+                        { ticker : $(this).parent().prev().prev().prev().prev().prev().html(), quantity : 1
+
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });*/
+                });
+
             })
             .catch(function (error) {
                 console.log(error);
             });
+
+
+
+
         /*
         $.each(result, function(i,v) {
             $("#result_table tbody").append("<tr><td>"+result[i].name+"</td><td>"+result[i].pBought+"</td><td>"+result[i].cPrice+"</td><td >"+result[i].numOfStocks+"</td><td class='ar'>"+result[i].totalVal+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
