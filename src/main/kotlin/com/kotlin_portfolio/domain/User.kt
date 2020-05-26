@@ -43,6 +43,7 @@ open class User(var userName: String = "",
     }
 
     fun addStock(stockQuantityChange : stockQuantityChangeDTO){
+        println(stockQuantityChange)
         portfolio.addStock(stockQuantityChange)
     }
 

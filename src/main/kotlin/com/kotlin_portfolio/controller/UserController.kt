@@ -13,6 +13,7 @@ import com.kotlin_portfolio.repo.PortfolioRepository
 import com.kotlin_portfolio.repo.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import kotlin.system.exitProcess
 
 @RestController
 class UserController {
@@ -72,7 +73,7 @@ class UserController {
         repo!!.save(user)
         pRepo!!.save(user.portfolio)
         println("new stock added")
-        return "OK"
+        return gson.toJson(StockTableRow(response.ticker, 1,iex!!.getStockPrice(response.ticker),1,iex!!.getStockPrice(response.ticker)))
     }
 
 

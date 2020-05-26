@@ -50,7 +50,6 @@ class IEXWrapper {
     }
 
     fun getStockPriceList(tickerList : List<String>): HashMap<String, Int> {
-        //val Process = ProcessBuilder("curl", "https://cloud.iexapis.com/beta/stock/AAPL/book?token=pk_5fd464ae2e144027a6d71d451a84b488").start()
         var tickers = ""
         for (ticker in tickerList){
             tickers = tickers.plus(ticker).plus(",")
@@ -67,6 +66,14 @@ class IEXWrapper {
             }
         }
         return stockMap
+    }
+
+    fun getStockPrice(stockName: String): Int{
+        val Process = ProcessBuilder("curl", "https://cloud.iexapis.com/beta/stock/$stockName/book?token=pk_5fd464ae2e144027a6d71d451a84b488").start()
+        Process.inputStream.reader(Charsets.UTF_8).use {
+            var data = it.readText()
+            return data.split("latestPrice\":")[1].split(",")[0].split(".")[0].toInt()
+        }
     }
 
 }
