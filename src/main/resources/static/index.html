@@ -10,6 +10,30 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+
+    <style>
+        body{
+            height: 100vh;
+            background: linear-gradient(to bottom, #bdc3c7, #2c3e50);
+        }
+        .table{
+            margin: 20px auto;
+        }
+        .plus{
+            cursor: pointer;
+            color: green;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .minus{
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            font-size: 24px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -49,22 +73,22 @@
     To log in with GitHub: <a href="/oauth2/authorization/github">click here</a>
 </div>
 <div class="container authenticated" style="display:none">
-    Hello <span id="stockSymbolList"></span>! Welcome to Portfolio Manager!
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown button
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-    </div>
+    Hello <span id="user"></span>! Welcome to Portfolio Manager!
 </div>
 
-
+</body>
 
 <script type="text/javascript">
+    axios.get('/getAuthenticatedUser', {
+    })
+        .then(function (response) {
+
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
     $.get("/getAuthenticatedUser", function(data) {
         $("#user").html(data);
         $(".unauthenticated").hide()
@@ -72,24 +96,5 @@
     });
 </script>
 
-<script type="text/javascript">
-    $.get("/getStockSymbolList", function(stockData) {
-        $("#stockSymbolList").html(stockData);
-        $(".unauthenticated").hide()
-        $(".authenticated").show()
-    });
 
-</script>
-
-<script type="text/javascript">
-    var select = document.getElementById("dropdownMenuButton1");
-    var options = ["1", "2", "3", "4", "5"];
-    for(var i = 0; i < options.length; i++) {
-        var opt = options[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        el.className = "dropdown-item"
-        select.appendChild(el);
-    }
 </script>

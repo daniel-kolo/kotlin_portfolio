@@ -27,6 +27,7 @@ class IEXController {
         //return iex.stockSymbolList.map()
         return jsonTut
     }
+
     /*
     @GetMapping("/getStockList")
     fun testJs(): String {

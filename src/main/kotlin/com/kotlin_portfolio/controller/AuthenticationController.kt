@@ -23,12 +23,4 @@ class AuthenticationController {
         userService.processUserLogin(principal)
         return login
     }
-
-
-    @PostMapping("/test")
-    fun postTest(): String {
-        return "test"
-    }
-
-
 }

@@ -12,6 +12,8 @@ import com.kotlin_portfolio.domain.User
 import com.kotlin_portfolio.repo.PortfolioRepository
 import com.kotlin_portfolio.repo.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.web.bind.annotation.GetMapping
 import kotlin.system.exitProcess
 
@@ -28,17 +30,27 @@ class UserController {
     private val iex: IEXWrapper? = null
 
     fun checkUser(userName : String): User{
-        var user = repo!!.findByUserName(userName)
+        var userN = userName
+        if (userN == ""){
+            userN = "daniel-kolo"
+        }
+        var user = repo!!.findByUserName(userN)
         if (user == null){
-            user = User(userName, "")
+            user = User(userN, "")
             repo!!.save(user)
         }
         return user
     }
 
     @PostMapping("/addStock")
-    fun addStock(@RequestBody stockAdded : String): String {
-        val userName = "daniel-kolo"
+    fun addStock(@RequestBody stockAdded : String, @AuthenticationPrincipal principal: OAuth2User): String {
+        var userName = ""
+        try{
+            val userName = principal.getAttributes().get("login").toString()
+        }
+        catch (e : Exception){
+            println(e)
+        }
         var user = checkUser(userName)
         var gson = Gson()
         var response = gson.fromJson(stockAdded, stockQuantityChangeDTO::class.java)
@@ -50,8 +62,14 @@ class UserController {
     }
 
     @PostMapping("/removeStock")
-    fun removeStock(@RequestBody stockRemoved : String): String {
-        val userName = "daniel-kolo"
+    fun removeStock(@RequestBody stockRemoved : String , @AuthenticationPrincipal principal: OAuth2User): String {
+        var userName = ""
+        try{
+            val userName = principal.getAttributes().get("login").toString()
+        }
+        catch (e : Exception){
+            println(e)
+        }
         var user = checkUser(userName)
         var gson = Gson()
         var response = gson.fromJson(stockRemoved, stockQuantityChangeDTO::class.java)
@@ -64,8 +82,14 @@ class UserController {
     }
 
     @PostMapping("/addNewStock")
-    fun addNewStock(@RequestBody stockAdded : String): String {
-        val userName = "daniel-kolo"
+    fun addNewStock(@RequestBody stockAdded : String, @AuthenticationPrincipal principal: OAuth2User): String {
+        var userName = ""
+        try{
+            val userName = principal.getAttributes().get("login").toString()
+        }
+        catch (e : Exception){
+            println(e)
+        }
         var user = checkUser(userName)
         var gson = Gson()
         var response = gson.fromJson(stockAdded, stockQuantityChangeDTO::class.java)
@@ -79,9 +103,15 @@ class UserController {
 
 
     @GetMapping("/getUserStockList")
-    fun getUserStockList(): String {
+    fun getUserStockList(@AuthenticationPrincipal principal: OAuth2User): String {
+        var userName = ""
+        try{
+            val userName = principal.getAttributes().get("login").toString()
+        }
+        catch (e : Exception){
+            println(e)
+        }
         val gson = Gson()
-        val userName = "daniel-kolo"
         var user = checkUser(userName)
         val stockMap = user.portfolio.stockMap
         val stockPriceMap = iex!!.getStockPriceList(stockMap.keys.toList())
@@ -105,9 +135,15 @@ class UserController {
 
 
     @GetMapping("/getStockList")
-    fun getStockList(): String {
+    fun getStockList(@AuthenticationPrincipal principal: OAuth2User): String {
+        var userName = ""
+        try{
+            val userName = principal.getAttributes().get("login").toString()
+        }
+        catch (e : Exception){
+            println(e)
+        }
         val gson = Gson()
-        val userName = "daniel-kolo"
         var user = checkUser(userName)
         val stockMap = user.portfolio.stockMap
 
@@ -119,9 +155,4 @@ class UserController {
 
         return gson.toJson(symbolList)
     }
-
-
-
-
-
 }

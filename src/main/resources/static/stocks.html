@@ -16,144 +16,28 @@
         .table{
             margin: 20px auto;
         }
+        .plus{
+            cursor: pointer;
+            color: green;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .minus{
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            font-size: 24px;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
 
     <!-- TABLE SCRIPT -->
 
-
-    <script type="text/javascript">
-        function addTable() {
-
-            var myTableDiv = document.getElementById("stock container")
-            var table = document.createElement('TABLE')
-            table.classList.add("table");
-
-            var tableBody = document.createElement('TBODY')
-
-            table.border = '1'
-            table.appendChild(tableBody);
-
-            var heading = new Array();
-            heading[0] = "Stock name"
-            heading[1] = "Price bought"
-            heading[2] = "Current price"
-            heading[3] = "Number of stocks"
-            heading[4] = "Total current value"
-            heading[5] = "Modify"
-
-            var stock =  Array()
-            stock[0] =  Array("APPLE INC", "318.89", "318.89", "1", "318.89","")
-            stock[1] =  Array("TESLA INC", "816.88", "816.88", "1", "816.88","")
-            stock[2] =  Array("MICROSOFT CORP", "183.51", "183.51", "2", "367.02","")
-            stock[3] =  Array("FACEBOOK INC-CLASS A", "234.91", "234.91", "1", "234.91","")
-            stock[4] =  Array("ALPHABET INC-CL A", "1413.24", "1413.24", "1", "1413.24","")
-
-            const loadTable = async () => {
-                const response = await fetch('http://localhost:8080/getTableTestList');
-                const myJson = await response.json(); //extract JSON from the http response
-                tmp = new Array()
-
-                for (i = 0; i<myJson.length; i++){
-                    tmp.push(myJson[i])
-                }
-
-                //stock[5] = tmp
-
-                var tr = document.createElement('TR');
-                tableBody.appendChild(tr);
-                for (i = 0; i < heading.length; i++) {
-                    var th = document.createElement('TH')
-                    th.width = '75';
-                    th.appendChild(document.createTextNode(heading[i]));
-                    tr.appendChild(th);
-                }
-
-                for (i = 0; i < stock.length; i++) {
-                    var tr = document.createElement('TR');
-                    for (j = 0; j < stock[i].length; j++) {
-                        var td = document.createElement('TD')
-                        td.appendChild(document.createTextNode(stock[i][j]));
-                        tr.appendChild(td)
-                    }
-
-                    var btn = document.createElement('input');
-                    btn.type = "button";
-                    btn.className = "btn";
-                    btn.style.color = "white"
-                    btn.value = "+" ;
-                    btn.onclick = (function(id) {return function() {
-                        console.log("number: "+ number[0]++)
-                    }})();
-
-
-                    var btn2 = document.createElement('input');
-                    btn2.type = "button";
-                    btn2.className = "btn";
-                    btn2.value = "-" ;
-                    btn2.style.color = "white"
-                    btn2.onclick = (function() {return function() {
-                        console.log("number: "+ number)
-                    }})();
-
-                    td.appendChild(btn);
-                    td.appendChild(btn2);
-                    tableBody.appendChild(tr);
-                }
-                myTableDiv.appendChild(table);
-                table.classList.add("table-dark");
-                table.classList.add("table-striped");
-            };
-            loadTable()
-
-
-            /*
-
-            axios.get('/test', {
-
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-            axios.post('/addStock',
-            { ticker : "GOOG", quantity : 1
-
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-                axios.post('/removeStock',
-                { ticker : "APPL", quantity : 1
-
-                })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-            */
-
-
-
-        }
-
-    </script>
-
     <!-- TABLE SCRIPT END-->
 
 </head>
-<body onload="addTable()">
+<body >
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="index.html">Home</a>
@@ -187,8 +71,22 @@
 <div id="stock_results">
 </div>
 
-<!-- TABLE -->
+<div class='container'>
+    <table class='table-dark table-striped' id='result_table'>
+        <thead>
+        <th style="width:200px">Stock name</th>
+        <th style="width:200px">Current price</th>
+        <th style="width:200px">Number of Stocks</th>
+        <th style="width:200px">Total current value</th>
+        <th style="width:200px">Modify</th>
+        </thead>
+        <tbody>
 
+        </tbody>
+    </table>
+</div>
+
+<!-- TABLE -->
 
 
 <!-- DYNAMIC DROPDOWN-->
@@ -199,7 +97,7 @@
     </div>
 
     <!-- DYNAMIC DROPDOWN-->
-    <select  class ="form-control" style="width:250px" id="stock list" ></select>
+    <select  class ="form-control"  onclick="changeF();"  style="width:250px" id="stock_list" ></select>
 
     <!--- DYNAMIC DROPDOWN-->
 </div>
@@ -208,25 +106,127 @@
 
 </body>
 <script>
-    const genDropdown = async () => {
-        const response =  await fetch('http://localhost:8080/getStockList');
-        const myJson =  await response.json(); //extract JSON from the http response
-        let tmp = Array();
 
-        for (i = 0; i<myJson.length; i++){
-            tmp.push(myJson[i])
-        }
+    axios.get('/getStockList', {
 
-        var countries = tmp, select = document.getElementById( 'stock list' );
+    })
+        .then(function (response) {
+            var result = []
+            for (it = 0; it<response.data.length;it++){
+                select.add( new Option( response.data[it] ) );
+                //result.push(response.data[it]);
+            }
+            //console.log(result)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 
-        for( country in countries ) {
-            select.add( new Option( countries[country] ) );
-        }
+    var countries = ['Select a stock to add'],
+        select = document.getElementById( 'stock_list' );
+
+    for( country in countries ) {
+
+        select.add( new Option( countries[country] ) );
+
     };
+    var selected = ["Select a stock to add"];
+    var isThere = true;
+    /* STATICK LIST  END */
+    function changeF(){
+        var selectBox = document.getElementById("stock_list");
 
-    genDropdown()
+        var result = $("#stock_list option:selected").text();
+
+        if (result !="Select a stock to add"){
+            axios.post('/addNewStock', {
+                ticker : result, quantity : 1
+            })
+                .then(function (response) {
+                    for( var i = 0; i< selected.length;i++){
+                        if( selected[i] !== result ){
+                            isThere = true
+                        }else{
+                            isThere = false
+                        }
+                    }
+                    if ( isThere ){
+                        $("#result_table").append("<tr><td>"+result+"</td><td>"+response.data.currentPrice+"</td><td >"+response.data.numberOfStocks+"</td><td class='ar'>"+response.data.totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
+                    }
+                    selected.push(result);
+                    //console.log("SELECTED ARRAY ");
+                    //console.log(selected);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
 
 
+    }
+</script>
+
+<script>
+    $(function() {
+        axios.get('/getUserStockList',
+            {
+
+            })
+            .then(function (response) {
+                var result = []
+                for (it = 0; it<response.data.length;it++){
+                    result.push(response.data[it]);
+                }
+
+                $.each(result, function(i,v) {
+                    $("#result_table tbody").append("<tr><td>"+result[i].stockName+"</td><td>"+result[i].currentPrice+"</td><td >"+result[i].numberOfStocks+"</td><td class='totalCurrentValue'>"+result[i].totalCurrentValue+"</td><td><span class='plus'>+</span><span class='minus'>-</span></td></tr>");
+                });
+
+                /* PLUS FV*/
+                $(".plus").click(function(){
+                    //$(this).parent().prev('.totalCurrentValue').html(parseInt($(this).parent().prev('.totalCurrentValue').html())+1);
+                    $(this).parent().prev().prev().html(parseInt($(this).parent().prev().prev().html())+1);
+                    var currentPrice = $(this).parent().prev().prev().prev().html()
+                    var numOf = $(this).parent().prev().prev().html()
+                    var total = currentPrice*numOf
+                    $(this).parent().prev().html(total);
+                    axios.post('/addStock',
+                        {
+                            ticker : $(this).parent().prev().prev().prev().prev().html(), quantity : 1
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                });
+                /* MINUS*/
+                $(".minus").click(function(){
+                    //$(this).parent().prev('.totalCurrentValue').html(parseInt($(this).parent().prev('.totalCurrentValue').html())-1);
+                    $(this).parent().prev().prev().html(parseInt($(this).parent().prev().prev().html())-1);
+                    var currentPrice = $(this).parent().prev().prev().prev().html()
+                    var numOf = $(this).parent().prev().prev().html()
+                    var total = currentPrice*numOf
+                    $(this).parent().prev().html(total);
+                        axios.post('/removeStock',
+                        { ticker : $(this).parent().prev().prev().prev().prev().html(), quantity : 1
+
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                });
+
+
+            })
+            .catch(function (error) {
+                console.log("ERROR:  "+error);
+            });
+    });
 </script>
 
 </html>
